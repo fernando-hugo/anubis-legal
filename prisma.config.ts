@@ -8,7 +8,6 @@ const connectionString = process.env.DATABASE_URL!;
 export default defineConfig({
   schema: "prisma/schema.prisma",
 
-  // Configuração do cliente Prisma com Neon
   client: {
     adapter() {
       const sql = neon(connectionString);
@@ -16,7 +15,13 @@ export default defineConfig({
     },
   },
 
-  // Seed automático (opcional)
+  migrate: {
+    adapter() {
+      const sql = neon(connectionString);
+      return new PrismaNeon(sql);
+    },
+  },
+
   migrations: {
     seed: "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
   },
