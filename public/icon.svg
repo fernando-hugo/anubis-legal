@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#18181D"/>
+      <stop offset="100%" style="stop-color:#0A0A0B"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8C97A"/>
+      <stop offset="100%" style="stop-color:#C9A84C"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
+
+  <!-- Gold border -->
+  <rect x="16" y="16" width="480" height="480" rx="90" fill="none" stroke="url(#gold)" stroke-width="8" opacity="0.6"/>
+
+  <!-- Inner subtle border -->
+  <rect x="26" y="26" width="460" height="460" rx="82" fill="none" stroke="#C9A84C" stroke-width="1" opacity="0.2"/>
+
+  <!-- Scales of Justice -->
+
+  <!-- Vertical staff -->
+  <rect x="246" y="108" width="20" height="272" rx="10" fill="url(#gold)" filter="url(#glow)"/>
+
+  <!-- Top orb -->
+  <circle cx="256" cy="98" r="28" fill="url(#gold)" filter="url(#glow)"/>
+  <circle cx="256" cy="98" r="14" fill="#0A0A0B" opacity="0.5"/>
+
+  <!-- Horizontal crossbar -->
+  <rect x="86" y="180" width="340" height="18" rx="9" fill="url(#gold)" filter="url(#glow)"/>
+
+  <!-- Left thread -->
+  <line x1="116" y1="198" x2="116" y2="280" stroke="#C9A84C" stroke-width="5" opacity="0.8"/>
+
+  <!-- Right thread -->
+  <line x1="396" y1="198" x2="396" y2="296" stroke="#C9A84C" stroke-width="5" opacity="0.8"/>
+
+  <!-- Left pan -->
+  <ellipse cx="116" cy="308" rx="52" ry="14" fill="none" stroke="url(#gold)" stroke-width="6"/>
+  <ellipse cx="116" cy="308" rx="52" ry="14" fill="#C9A84C" opacity="0.12"/>
+  <!-- Left pan arc -->
+  <path d="M 66 308 Q 116 336 166 308" fill="none" stroke="url(#gold)" stroke-width="5"/>
+
+  <!-- Right pan (lower = heavier) -->
+  <ellipse cx="396" cy="324" rx="52" ry="14" fill="none" stroke="url(#gold)" stroke-width="6"/>
+  <ellipse cx="396" cy="324" rx="52" ry="14" fill="#C9A84C" opacity="0.12"/>
+  <!-- Right pan arc -->
+  <path d="M 346 324 Q 396 352 446 324" fill="none" stroke="url(#gold)" stroke-width="5"/>
+
+  <!-- Base pedestal -->
+  <rect x="176" y="376" width="160" height="22" rx="11" fill="url(#gold)"/>
+  <rect x="216" y="394" width="80" height="12" rx="6" fill="url(#gold)" opacity="0.6"/>
+  <rect x="236" y="402" width="40" height="8" rx="4" fill="url(#gold)" opacity="0.4"/>
+
+  <!-- Corner decorative dots -->
+  <circle cx="60" cy="60" r="4" fill="#C9A84C" opacity="0.3"/>
+  <circle cx="452" cy="60" r="4" fill="#C9A84C" opacity="0.3"/>
+  <circle cx="60" cy="452" r="4" fill="#C9A84C" opacity="0.3"/>
+  <circle cx="452" cy="452" r="4" fill="#C9A84C" opacity="0.3"/>
+</svg>
