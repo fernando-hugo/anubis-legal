@@ -6,7 +6,6 @@ import { neon } from "@neondatabase/serverless";
 const connectionString = process.env.DATABASE_URL!;
 
 export default defineConfig({
-  earlyAccess: true,
   schema: "prisma/schema.prisma",
   migrate: {
     url: connectionString,
