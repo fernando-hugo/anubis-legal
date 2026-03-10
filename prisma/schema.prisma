@@ -5,11 +5,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url       = env("DATABASE_URL")      ← essa linha estava faltando
-  directUrl = env("DIRECT_URL")        ← essa também
-  
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
+  
+
 
 // ─────────────────────────────────────────
 // ORGANIZAÇÃO (cada escritório = 1 org)
