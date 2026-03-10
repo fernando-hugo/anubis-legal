@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────────────────────
+// ORGANIZAÇÃO (cada escritório = 1 org)
+// ─────────────────────────────────────────
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique   // ex: "escritorio-silva" → /login?org=escritorio-silva
+  logo      String?
+  plan      String   @default("free") // free | pro | enterprise
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  users     User[]
+  clients   Client[]
+  cases     Case[]
+  deadlines Deadline[]
+  documents Document[]
+  timeLogs  TimeLog[]
+  activities Activity[]
+}
+
+// ─────────────────────────────────────────
+// USUÁRIOS (advogados do escritório)
+// ─────────────────────────────────────────
+model User {
+  id             String   @id @default(cuid())
+  name           String
+  email          String   @unique
+  password       String   // hash bcrypt
+  role           String   @default("lawyer") // admin | lawyer | assistant
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  cases          Case[]
+  deadlines      Deadline[]
+  timeLogs       TimeLog[]
+  activities     Activity[]
+}
+
+// ─────────────────────────────────────────
+// CLIENTES DO ESCRITÓRIO
+// ─────────────────────────────────────────
+model Client {
+  id             String   @id @default(cuid())
+  name           String
+  email          String?
+  phone          String?
+  cpfCnpj        String?
+  type           String   @default("PF") // PF | PJ
+  status         String   @default("active") // active | inactive
+  createdAt      DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  cases          Case[]
+}
+
+// ─────────────────────────────────────────
+// PROCESSOS
+// ─────────────────────────────────────────
+model Case {
+  id             String   @id @default(cuid())
+  number         String
+  title          String
+  status         String   @default("active") // active | waiting | appeal | closed
+  priority       String   @default("medium") // low | medium | high | urgent
+  area           String?  // civil | labor | criminal | family | tax | business
+  court          String?
+  description    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  clientId       String
+  client         Client   @relation(fields: [clientId], references: [id])
+
+  assignedToId   String?
+  assignedTo     User?    @relation(fields: [assignedToId], references: [id])
+
+  deadlines      Deadline[]
+  documents      Document[]
+  timeLogs       TimeLog[]
+  activities     Activity[]
+}
+
+// ─────────────────────────────────────────
+// PRAZOS
+// ─────────────────────────────────────────
+model Deadline {
+  id             String   @id @default(cuid())
+  title          String
+  type           String   // ordinary | fatal | hearing | diligence | appeal
+  dueDate        DateTime
+  completed      Boolean  @default(false)
+  completedAt    DateTime?
+  createdAt      DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  caseId         String
+  case           Case     @relation(fields: [caseId], references: [id])
+
+  assignedToId   String?
+  assignedTo     User?    @relation(fields: [assignedToId], references: [id])
+}
+
+// ─────────────────────────────────────────
+// DOCUMENTOS
+// ─────────────────────────────────────────
+model Document {
+  id             String   @id @default(cuid())
+  title          String
+  type           String   // petition | power_of_attorney | contract | appeal | other
+  status         String   @default("draft") // draft | review | approved | final
+  version        String   @default("v1")
+  fileUrl        String?
+  createdAt      DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  caseId         String
+  case           Case     @relation(fields: [caseId], references: [id])
+}
+
+// ─────────────────────────────────────────
+// LANÇAMENTO DE HORAS (Financeiro)
+// ─────────────────────────────────────────
+model TimeLog {
+  id             String   @id @default(cuid())
+  description    String
+  hours          Float
+  ratePerHour    Float    @default(350)
+  billable       Boolean  @default(true)
+  date           DateTime
+  createdAt      DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  caseId         String
+  case           Case     @relation(fields: [caseId], references: [id])
+
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+}
+
+// ─────────────────────────────────────────
+// FEED DE ATIVIDADES
+// ─────────────────────────────────────────
+model Activity {
+  id             String   @id @default(cuid())
+  type           String   // case_created | deadline_added | document_uploaded | time_logged
+  description    String
+  createdAt      DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  caseId         String?
+  case           Case?    @relation(fields: [caseId], references: [id])
+
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+}
+

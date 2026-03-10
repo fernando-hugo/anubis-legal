@@ -1,5 +1,5 @@
-import DashboardBase from "@/components/DashboardBase";
+import { redirect } from "next/navigation"
 
 export default function Page() {
-  return <DashboardBase />;
+  redirect("/dashboard")
 }
